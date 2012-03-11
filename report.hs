@@ -3,8 +3,9 @@
 import Csv(Csv, readCsv, scanCsvRows)
 
 import Control.Arrow(first)
-import Data.Maybe(fromJust)
+import Control.Monad(liftM)
 import Data.List(foldl')
+import Data.Maybe(fromJust)
 import Text.Printf(printf)
 
 import qualified Data.ByteString.Char8 as B
@@ -67,7 +68,4 @@ printResults = mapM_ printOne . M.toList where
         B.putStr $ B.intercalate (B.pack ": ") [user, problem]
         putStrLn $ printf "\t%s (= %s)" (show record) (show score)
 
-main = do
-    c <- readCsv "/dev/stdin"
-    let runs = runsFromCsv c
-    printResults $ gatherRuns runs
+main = printResults =<< liftM (gatherRuns . runsFromCsv) (readCsv "/dev/stdin")
