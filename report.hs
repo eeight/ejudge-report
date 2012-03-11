@@ -62,7 +62,7 @@ printResults :: ResultMap -> IO ()
 printResults = mapM_ printOne . M.toList where
     printOne ((user, problem), record) = do
         let score = if (last record) == OK
-            then Just $ 10 - min 10 (sum . map penalty $ record)
+            then Just $ 10 - (sum . map penalty $ record)
             else Nothing
         B.putStr $ B.intercalate (B.pack ": ") [user, problem]
         putStrLn $ printf "\t%s (= %s)" (show record) (show score)
